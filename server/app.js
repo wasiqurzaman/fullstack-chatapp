@@ -7,12 +7,15 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
 
+import AuthRoutes from "./routes/auth.js";
+import UserRoutes from "./routes/user.js";
+
 const app = express();
 
 
 app.use(cors());
 app.use(cookieParser());
-app.use(express.static());
+app.use(express.json());
 
 async function connectDB() {
   try {
@@ -28,6 +31,9 @@ connectDB();
 
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
+
+app.use("/api/auth", AuthRoutes);
+app.use("/api/users", UserRoutes);
 
 const connectedSockets = new Set();
 

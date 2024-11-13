@@ -7,8 +7,12 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
 
+import requestLogger from "./middlewares/logger.js";
+
+import authenticateUser from "./middlewares/authenticateUser.js";
 import AuthRoutes from "./routes/auth.js";
 import UserRoutes from "./routes/user.js";
+import ChatRoomRoutes from "./routes/chatroom.js";
 
 const app = express();
 
@@ -16,6 +20,8 @@ const app = express();
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(requestLogger);
 
 async function connectDB() {
   try {
@@ -33,7 +39,11 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 app.use("/api/auth", AuthRoutes);
+
+app.use(authenticateUser);
+
 app.use("/api/users", UserRoutes);
+app.use("/api/chatroom", ChatRoomRoutes);
 
 const connectedSockets = new Set();
 

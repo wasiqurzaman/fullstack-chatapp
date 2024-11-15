@@ -12,6 +12,7 @@ import requestLogger from "./middlewares/logger.js";
 import authenticateUser from "./middlewares/authenticateUser.js";
 import AuthRoutes from "./routes/auth.js";
 import UserRoutes from "./routes/user.js";
+import MessageRoutes from "./routes/message.js";
 import ChatRoomRoutes from "./routes/chatroom.js";
 
 const app = express();
@@ -43,7 +44,8 @@ app.use("/api/auth", AuthRoutes);
 app.use(authenticateUser);
 
 app.use("/api/users", UserRoutes);
-app.use("/api/chatroom", ChatRoomRoutes);
+app.use("/api/messages", MessageRoutes);
+app.use("/api/chatrooms", ChatRoomRoutes);
 
 const connectedSockets = new Set();
 
